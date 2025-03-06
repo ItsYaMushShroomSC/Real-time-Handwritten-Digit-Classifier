@@ -7,6 +7,8 @@ import numpy as np
 import base64
 from PIL import Image
 from io import BytesIO
+import matplotlib.pyplot as plt
+
 
 app = FastAPI()
 
@@ -63,7 +65,7 @@ def preprocess_image(image_data: str):
 
     # Convert image to numpy array and normalize
     img_array = np.array(img).astype(np.float32)
-    img_array = (img_array / 255.0)  # Normalize to [0, 1]
+    img_array = (img_array - 0.5) / 0.5  # Normalize to [-1, 1]
 
     # Add batch dimension and channel dimension (1, 28, 28)
     img_array = np.expand_dims(img_array, axis=0)  # Shape (1, 28, 28)

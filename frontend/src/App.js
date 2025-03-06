@@ -33,7 +33,7 @@ function App() {
   return (
     <div style={{ textAlign: "center", marginTop: "20px" }}>
       <h1>Handwritten Digit Classifier</h1>
-      <CanvasDraw ref={canvasRef} brushRadius={5} lazyRadius={1} />
+      <CanvasDraw ref={canvasRef} brushRadius={5} lazyRadius={0} />
       <div>
         <button onClick={clearCanvas}>Clear</button>
         <button onClick={sendImageToBackend}>Predict</button>
