@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import CanvasDraw from "react-canvas-draw";
 import backgroundImage from "./catImg.png";
 console.log(backgroundImage);
@@ -8,15 +8,20 @@ function App() {
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [blackCanvasDataURL, setBlankCanvasDataURL] = useState("");
+  const [selectedModel, setSelectedModel] = useState("Default");  // default model
 
-  useEffect(() => {
-    const blankCanvas = document.createElement("canvas")
-    blankCanvas.width = 400;
-    blankCanvas.height = 400;
-    const blankDataURL = blankCanvas.toDataURL();
-    setBlankCanvasDataURL(blankDataURL);
-  }, []);
+  const modelOptions = [
+    "Default",
+    "20 Layer NN",
+    "Transfer Learning",
+    "Data Augmentation",
+    "Data Synthesis",
+    "Model F",
+    "Model G",
+    "Model H",
+    "Model I",
+    "Model J",
+  ];
 
   const clearCanvas = () => {
     canvasRef.current.clear();
@@ -81,21 +86,83 @@ function App() {
         paddingTop: "40px",
         overflow: "hidden",        // prevents scrollbars from appearing
         height: "100vh",           // restricts container height to viewport height
+        display: "flex",           // added to layout sidebar next to main content
       }}
     >
-      <h1 style={{ marginTop: "20px" }}>Handwritten Digit Classifier</h1>
-      <CanvasDraw ref={canvasRef} brushRadius={5} lazyRadius={0} canvasWidth={500} canvasHeight={500}  style={{marginTop: "40px", marginLeft: "50px", border: "1px solid #ccc", background: "white" }}/>
-      <div style={{ marginTop: 10 }}>
-        <button onClick={clearCanvas} style={{ minWidth: "80px", transition: "background-color 0.3s" }}>Clear</button>
-        <button onClick={undoLast}  style={{ minWidth: "80px", transition: "background-color 0.3s" }}>Undo</button>
-        <button onClick={sendImageToBackend} style={{ minWidth: "80px", transition: "background-color 0.3s" }}>
-          Predict
-        </button>
+      <div style={{ flex: 1 }}>
+        <h1 style={{ marginTop: "20px" }}>Handwritten Digit Classifier</h1>
+        <CanvasDraw
+          ref={canvasRef}
+          brushRadius={5}
+          lazyRadius={0}
+          canvasWidth={500}
+          canvasHeight={500}
+          style={{
+            marginTop: "40px",
+            marginLeft: "50px",
+            border: "1px solid #ccc",
+            background: "white",
+          }}
+        />
+        <div style={{ marginTop: 10 }}>
+          <button
+            onClick={clearCanvas}
+            style={{ minWidth: "80px", transition: "background-color 0.3s" }}
+          >
+            Clear
+          </button>
+          <button
+            onClick={undoLast}
+            style={{ minWidth: "80px", transition: "background-color 0.3s" }}
+          >
+            Undo
+          </button>
+          <button
+            onClick={sendImageToBackend}
+            style={{ minWidth: "80px", transition: "background-color 0.3s" }}
+          >
+            Predict
+          </button>
+        </div>
+        {prediction !== null && <p>Prediction: {prediction}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
-      {prediction !== null && <p>Prediction: {prediction}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+  
+      {/* Sidebar for model selection */}
+      <div
+        style={{
+          width: "200px",
+          backgroundColor: "rgba(255,255,255,0.8)",
+          padding: "20px",
+          borderLeft: "1px solid #ccc",
+          overflowY: "auto",
+          textAlign: "left",
+        }}
+      >
+        <h3>Select AI Model</h3>
+        {modelOptions.map((model) => (
+          <button
+            key={model}
+            onClick={() => setSelectedModel(model)}
+            style={{
+              display: "block",
+              width: "100%",
+              marginBottom: "10px",
+              padding: "10px",
+              backgroundColor: selectedModel === model ? "#4caf50" : "#eee",
+              color: selectedModel === model ? "white" : "black",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              transition: "background-color 0.3s",
+            }}
+          >
+            {model}
+          </button>
+        ))}
+      </div>
     </div>
   );
-}
+}  
 
 export default App;
