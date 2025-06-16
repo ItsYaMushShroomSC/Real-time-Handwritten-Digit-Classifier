@@ -16,15 +16,16 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",  # React frontend
     "http://127.0.0.1:3000",  # React frontend
+    "http://192.168.1.158:3000"
 ]
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Allows these origins
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],   # <-- ensure this includes "OPTIONS"
+    allow_headers=["*"],   # <-- ensure headers like "Content-Type" are allowed
 )
 
 # Load the ONNX model
